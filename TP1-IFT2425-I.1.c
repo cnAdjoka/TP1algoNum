@@ -406,7 +406,7 @@ int main(int argc,char** argv)
 	  else{cmv = newCmv;}
   }
 
-  printf("Valeur f(0) = %f\n"cmvFinal);
+  printf("Valeur f(0) = %f\n",cmvFinal);
   
      
 //--------------------------------------------------------------------------------
