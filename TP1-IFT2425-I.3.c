@@ -375,6 +375,8 @@ int main(int argc,char** argv)
 
   double cmvFinal = 0;
 
+  double A = 0, B = 0, C = 0;
+
   for (;;){
 	
 	  // f(x)
@@ -391,8 +393,19 @@ int main(int argc,char** argv)
 	  
 	  ft = (num/denom) - (1/cmv) - terme_droit;
 	  double ftEpsilon= (numPrime/denomPrime) - (1/(cmv+epsilon)) - terme_droit;
-	  
-	  fprime = (ftEpsilon - ft)/epsilon;
+
+	  for(int i = 0; i < 10; i++) {
+	    double y_pow_c = pow(y_table[i], cmv);
+	    double ln_y = log(y_table[i]);
+	    
+	    A += y_pow_c;
+	    B += y_pow_c * ln_y;
+	    C += y_pow_c * ln_y * ln_y;
+	}
+	 
+
+
+	  fprime = (C * A - B * B) / (A * A) + 1.0 / (cmv * cmv); 
 	  
 
 	  double newCmv = cmv - (ft/fprime);
