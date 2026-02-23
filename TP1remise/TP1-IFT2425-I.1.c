@@ -1,6 +1,6 @@
 //------------------------------------------------------
 // module  : Tp-IFT2425-I.1.c
-// author  : 
+// author  : Chris-Noah Adjoka- Alice Rivest
 // date    : 
 // version : 1.0
 // language: C
@@ -350,39 +350,44 @@ int main(int argc,char** argv)
    //---------------------------
    //
    //
-  double y_table[] = {0.11,0.24,0.27,0.52,1.13,1.54,1.71,1.84,1.92,2.01};
+  float y_table[] = {0.11,0.24,0.27,0.52,1.13,1.54,1.71,1.84,1.92,2.01};
 
   
-  double sommeLn = 0;
+  float sommeLn = 0;
 
 
   for(int i = 0; i<10; i++){sommeLn += log(y_table[i]);}
   
-  const double terme_droit = 0.1* sommeLn;
+  const float terme_droit = 0.1* sommeLn;
 
 
-  double ft = 0;
-  double fprime= 0;
-  double cmv = 0.25;
-  double epsilon = 0.00001;
-  double tolerance = 0.000001;
-
-  double num = 0;
-  double denom = 0;
-
-  double numPrime = 0;
-  double denomPrime = 0;
-
-  double cmvFinal = 0;
+  float ft = 0;
+  float fprime= 0;
+  float cmv = 0.25;
+  float epsilon = 0.00001;
+  float tolerance = 0.000001;
+  float cmvFinal = 0;
+  int loop = 0;
 
   for (;;){
-	
-	  // f(x)
+
+	  float num = 0;
+	  float denom = 0;
+
+	  float numPrime = 0;
+	  float denomPrime = 0;
+
+
+
+	  loop ++;
+	  printf("n = %d\n", loop);
+
+	  // f(x) args
 	  for(int i = 0; i<10; i++){
 		  num += (pow(y_table[i], cmv))*log(y_table[i]);
 		  denom += pow(y_table[i],cmv);
 		}
-	// f(x+epsilon) 
+	// f(x+epsilon) args 
 	  for(int i = 0; i<10; i++){
 		  numPrime += (pow(y_table[i], (cmv+epsilon)))*log(y_table[i]);
 		  denomPrime += pow(y_table[i],(cmv+epsilon));
@@ -390,25 +395,35 @@ int main(int argc,char** argv)
 
 	  
 	  ft = (num/denom) - (1/cmv) - terme_droit;
-	  double ftEpsilon= (numPrime/denomPrime) - (1/(cmv+epsilon)) - terme_droit;
+	  float ftEpsilon= (numPrime/denomPrime) - (1/(cmv+epsilon)) - terme_droit;
 	  
 	  fprime = (ftEpsilon - ft)/epsilon;
 	  
 
-	  double newCmv = cmv - (ft/fprime);
+	  float newCmv = cmv - (ft/fprime);
 		
 	  
-	  if ((newCmv - cmv) < tolerance){
+	  if (fabs(newCmv - cmv) <= tolerance){
 	    
 	    cmvFinal = newCmv;
+		
+	    printf("Valeur cmv final = %f\n",cmvFinal);
+	    printf("F(cmv) final = %f\n",ft);
 
 	    break;
 	  }
-	  else{cmv = newCmv;}
+	  else{
+		  float diff = fabs(cmv-newCmv);
+		  printf("previous cmv = %f\n",cmv); 
+		  cmv = newCmv;
+
+		  printf("current cmv = %f\n", cmv);
+		  printf("current F(cmv) = %f\n",ft);
+		  printf("diff = %f\n\n",diff);
+	  	  }
+
   }
 
-  printf("Valeur f(0) = %f\n",cmvFinal);
-  
      
 //--------------------------------------------------------------------------------
 //---------------- visu sous XWINDOW ---------------------------------------------

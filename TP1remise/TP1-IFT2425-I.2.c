@@ -366,22 +366,27 @@ int main(int argc,char** argv)
   double cmv = 0.25;
   double epsilon = 0.00001;
   double tolerance = 0.000001;
-  double num = 0;
-  double denom = 0;
-  double numPlus = 0;
-  double denomPlus = 0;
-  double numMoins = 0;
-  double denomMoins = 0;
-  double numPlus2 = 0;
-  double denomPlus2 = 0;
-  double numMoins2 = 0;
-  double denomMoins2 = 0;			
-
   double cmvFinal = 0;
+  int loop = 0;
 
   for (;;){
 
-	  // f(x)
+	  double num = 0;
+	  double denom = 0;
+	  double numPlus = 0;
+	  double denomPlus = 0;
+	  double numMoins = 0;
+	  double denomMoins = 0;
+	  double numPlus2 = 0;
+	  double denomPlus2 = 0;
+	  double numMoins2 = 0;
+	  double denomMoins2 = 0;			
+
+
+	  loop++;
+	  printf("n = %d\n", loop);
+
+	  // f(x) args
 	  for(int i = 0; i<10; i++){
 		  num += (pow(y_table[i], cmv))*log(y_table[i]);
 		  denom += pow(y_table[i],cmv);
@@ -424,13 +429,25 @@ int main(int argc,char** argv)
 
 	  
 		
-	  if ((newCmv - cmv) < tolerance){
-	    	    
+	  if (fabs(newCmv - cmv) < tolerance){
+	       
 	    cmvFinal = newCmv;
-
+	    printf("Valeur cmv final = %f\n", cmvFinal);
+	    printf("F(cmv) final = %f\n",ft);
+	    
 	    break;
 	  }
-	  else{cmv = newCmv;}
+	  else{
+		  double diff = fabs(cmv-newCmv);
+		  cmv = newCmv;
+
+		  printf("current cmv = %f\n", cmv);
+		  printf("current F(cmv) = %f\n",ft);
+		  printf("diff = %f\n\n",diff);
+	
+
+	  }
+
   }
 
   printf("Valeur f(0) = %f\n",cmvFinal);
