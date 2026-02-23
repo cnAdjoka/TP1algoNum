@@ -1,7 +1,7 @@
 //------------------------------------------------------
-// module  : Tp-IFT2425-I.1.c
-// author  : 
-// date    : 
+// module  : Tp-IFT2425-II.3.c
+// author  : Alice Rivest et Chris-Noah Adjoka
+// date    : 23-02-2026
 // version : 1.0
 // language: C
 // note    :
@@ -61,7 +61,7 @@ int open_display()
 
 /************************************************************************/
 /* FABRIQUE_WINDOW()							*/
-/* Cette fonction crée une fenetre X et l'affiche à l'écran.	        */
+/* Cette fonction crï¿½e une fenetre X et l'affiche ï¿½ l'ï¿½cran.	        */
 /************************************************************************/
 Window fabrique_window(char *nom_fen,int x,int y,int width,int height,int zoom)
 {
@@ -95,8 +95,8 @@ Window fabrique_window(char *nom_fen,int x,int y,int width,int height,int zoom)
 
   gc=XCreateGC(display,win,0,NULL);
 
-  XSelectInput(display,win,ExposureMask|KeyPressMask|ButtonPressMask| 
-               ButtonReleaseMask|ButtonMotionMask|PointerMotionHintMask| 
+  XSelectInput(display,win,ExposureMask|KeyPressMask|ButtonPressMask|
+               ButtonReleaseMask|ButtonMotionMask|PointerMotionHintMask|
                StructureNotifyMask);
 
   XMapWindow(display,win);
@@ -105,7 +105,7 @@ Window fabrique_window(char *nom_fen,int x,int y,int width,int height,int zoom)
 
 /****************************************************************************/
 /* CREE_XIMAGE()							    */
-/* Crée une XImage à partir d'un tableau de float                           */
+/* Crï¿½e une XImage ï¿½ partir d'un tableau de float                           */
 /* L'image peut subir un zoom.						    */
 /****************************************************************************/
 XImage* cree_Ximage(float** mat,int z,int length,int width)
@@ -129,14 +129,14 @@ XImage* cree_Ximage(float** mat,int z,int length,int width)
         exit(-1); }
 
   for(lig=0;lig<lgth;lig=lig+z) for(col=0;col<wdth;col=col+z)
-   { 
+   {
     pix=(unsigned char)mat[lig/z][col/z];
     for(zoom_lig=0;zoom_lig<z;zoom_lig++) for(zoom_col=0;zoom_col<z;zoom_col++)
-      { 
+      {
        dat[((lig+zoom_lig)*wdth*4)+((4*(col+zoom_col))+0)]=pix;
        dat[((lig+zoom_lig)*wdth*4)+((4*(col+zoom_col))+1)]=pix;
        dat[((lig+zoom_lig)*wdth*4)+((4*(col+zoom_col))+2)]=pix;
-       dat[((lig+zoom_lig)*wdth*4)+((4*(col+zoom_col))+3)]=pix; 
+       dat[((lig+zoom_lig)*wdth*4)+((4*(col+zoom_col))+3)]=pix;
        }
     }
   } /*--------------------------------------------------------*/
@@ -155,16 +155,16 @@ XImage* cree_Ximage(float** mat,int z,int length,int width)
         exit(-1); }
 
   for(lig=0;lig<(lgth*z);lig=lig+z) for(col=0;col<(wdth*z);col=col+z)
-   {  
+   {
     somme=0.0;
     for(zoom_lig=0;zoom_lig<z;zoom_lig++) for(zoom_col=0;zoom_col<z;zoom_col++)
      somme+=mat[lig+zoom_lig][col+zoom_col];
-           
-     somme/=(z*z);    
+
+     somme/=(z*z);
      dat[((lig/z)*wdth*4)+((4*(col/z))+0)]=(unsigned char)somme;
      dat[((lig/z)*wdth*4)+((4*(col/z))+1)]=(unsigned char)somme;
      dat[((lig/z)*wdth*4)+((4*(col/z))+2)]=(unsigned char)somme;
-     dat[((lig/z)*wdth*4)+((4*(col/z))+3)]=(unsigned char)somme; 
+     dat[((lig/z)*wdth*4)+((4*(col/z))+3)]=(unsigned char)somme;
    }
   } /*--------------------------------------------------------*/
 
@@ -211,8 +211,8 @@ void free_fmatrix_2d(float** pmat)
   delete[] pmat;}
 
 //----------------------------------------------------------
-// Sauvegarde de l'image de nom <name> au format pgm                        
-//----------------------------------------------------------                
+// Sauvegarde de l'image de nom <name> au format pgm
+//----------------------------------------------------------
 void SaveImagePgm(char* bruit,char* name,float** mat,int lgth,int wdth)
 {
  int i,j;
@@ -226,8 +226,8 @@ void SaveImagePgm(char* bruit,char* name,float** mat,int lgth,int wdth)
 
   //--ouverture fichier--
   fic=fopen(buff,"wb");
-    if (fic==NULL) 
-        { printf("Probleme dans la sauvegarde de %s",buff); 
+    if (fic==NULL)
+        { printf("Probleme dans la sauvegarde de %s",buff);
           exit(-1); }
   printf("\n Sauvegarde de %s au format pgm\n",buff);
 
@@ -238,11 +238,11 @@ void SaveImagePgm(char* bruit,char* name,float** mat,int lgth,int wdth)
   fprintf(fic,"\n255\n");
 
   //--enregistrement--
-  for(i=0;i<lgth;i++) for(j=0;j<wdth;j++) 
+  for(i=0;i<lgth;i++) for(j=0;j<wdth;j++)
 	fprintf(fic,"%c",(char)mat[i][j]);
-   
+
   //--fermeture fichier--
-   fclose(fic); 
+   fclose(fic);
 }
 
 //----------------------------------------------------------
@@ -261,10 +261,10 @@ void Recal(float** mat,int lgth,int wdth)
 
   //plus min
   for(i=0;i<lgth;i++) for(j=0;j<wdth;j++) mat[i][j]-=min;
- 
+
   //Recherche du max
   max=mat[0][0];
-  for(i=0;i<lgth;i++) for(j=0;j<wdth;j++) 
+  for(i=0;i<lgth;i++) for(j=0;j<wdth;j++)
     if (mat[i][j]>max) max=mat[i][j];
 
   //Recalibre la matrice
@@ -273,7 +273,7 @@ void Recal(float** mat,int lgth,int wdth)
 }
 
 //----------------------------------------------------------
-//  Egalisation Histogramme         
+//  Egalisation Histogramme
 //----------------------------------------------------------
 void Egalise(float** img,int lgth,int wdth,int thresh)
 {
@@ -289,8 +289,8 @@ void Egalise(float** img,int lgth,int wdth,int thresh)
  nb=0;
  for(i=0;i<lgth;i++) for(j=0;j<wdth;j++)
     { tmp=img[i][j];
-      if (tmp>thresh) { HistoNg[(int)(tmp)]++; nb++; } } 
- 
+      if (tmp>thresh) { HistoNg[(int)(tmp)]++; nb++; } }
+
  for(i=0;i<256;i++)  HistoNg[i]/=(float)(nb);
 
  //Calcul Fnct Repartition
@@ -323,39 +323,81 @@ int main(int argc,char** argv)
  //------------
  XEvent ev;
  Window win_ppicture;
- XImage *x_ppicture; 
- char   nomfen_ppicture[100]; 
+ XImage *x_ppicture;
+ char   nomfen_ppicture[100];
  int    length,width;
 
  length=width=512;
- float** Graph2D=fmatrix_allocate_2d(length,width); 
+ float** Graph2D=fmatrix_allocate_2d(length,width);
  flag_graph=1;
  zoom=1;
 
  //Init
  for(i=0;i<length;i++) for(j=0;j<width;j++) Graph2D[i][j]=0.0;
- 
+
 //--------------------------------------------------------------------------------
 // PROGRAMME ---------------------------------------------------------------------
 //--------------------------------------------------------------------------------
 
- //Affichage dégradé de niveaux de gris dans Graph2D
- for(int i=0;i<length;i++) for(int j=0;j<width;j++) Graph2D[i][j]=j/2.0;
+  //Affichage figure fractale de Mandelbrot dans Graph2D
+  for (int i = 0; i < length; i++)
+      for (int j = 0; j < width; j++) {
 
-  
+          // Converti pixels en coordonnÃ©es du plan complexe
+          float x_k = 2.0 * (j - width / 1.35) / (width - 1);
+          float y_l = 2.0 * (i - length / 2.0) / (length - 1);
+
+          float x = 0;
+          float y = 0;
+          int iteration = 0;
+          int nbIterMax = 200;
+
+          // Calcul de Mandelbrot
+          while (x * x + y * y < 4.0 && iteration < nbIterMax) {
+              float x_current = x * x - y * y + x_k;                // partie rÃ©elle
+              y = 2 * x * y + y_l;                                  // partie imaginaire
+              x = x_current;
+              iteration++;
+          }
+          // Points dans l'ensemble
+          if (iteration == nbIterMax) {
+              x = 0;
+              y = 0;
+              iteration = 0;
+
+              // Calcul itÃ©rations de z_n
+              while (x * x + y * y < 4.0 && iteration < nbIterMax) {
+                  float x_current = x * x - y * y + x_k;
+                  y = 2 * x * y + y_l;
+                  x = x_current;
+
+                  // Converti coordonnÃ©es plan complexe en pixels
+                  int px = (x * (width - 1)) / 2.0 + width / 1.35;
+                  int py = (y * (length - 1)) / 2.0 + length / 2.0;
+
+                  // VÃ©rifie coordonnÃ©s sont dans image
+                  if (px >= 0 && px < width && py >= 0 && py < length) {
+                      Graph2D[px][py] += 1.0;
+                  }
+                  iteration++;
+              }
+          }
+      }
+
+
    //---------------------------
    //Algorithme NEWTON
    //---------------------------
 
    //implementer ici
- 
 
-  
-     
+
+
+
 //--------------------------------------------------------------------------------
 //---------------- visu sous XWINDOW ---------------------------------------------
 //--------------------------------------------------------------------------------
-  
+
 //Recalage-Egalise le graph
 Recal(Graph2D,length,width);
 Egalise(Graph2D,length,width,0.0);
@@ -379,11 +421,11 @@ Egalise(Graph2D,length,width,0.0);
       XNextEvent(display,&ev);
        switch(ev.type)
         {
-	 case Expose:   
-         XPutImage(display,win_ppicture,gc,x_ppicture,0,0,0,0,x_ppicture->width,x_ppicture->height);  
+	 case Expose:
+         XPutImage(display,win_ppicture,gc,x_ppicture,0,0,0,0,x_ppicture->width,x_ppicture->height);
          break;
 
-         case KeyPress: 
+         case KeyPress:
          XDestroyImage(x_ppicture);
 
          XFreeGC(display,gc);
@@ -393,12 +435,12 @@ Egalise(Graph2D,length,width,0.0);
          }
    if (!flag_graph) break;
      }
- } 
-       
- //retour sans probleme 
+ }
+
+ //retour sans probleme
  printf("\n Fini... \n\n\n");
  return 0;
  }
- 
+
 
 

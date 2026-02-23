@@ -1,7 +1,7 @@
 //------------------------------------------------------
-// module  : Tp-IFT2425-I.1.c
-// author  : 
-// date    : 
+// module  : Tp-IFT2425-II.1.c
+// author  : Alice Rivest et Chris-Noah Adjoka
+// date    : 23-02-2026
 // version : 1.0
 // language: C
 // note    :
@@ -61,7 +61,7 @@ int open_display()
 
 /************************************************************************/
 /* FABRIQUE_WINDOW()							*/
-/* Cette fonction crée une fenetre X et l'affiche à l'écran.	        */
+/* Cette fonction crï¿½e une fenetre X et l'affiche ï¿½ l'ï¿½cran.	        */
 /************************************************************************/
 Window fabrique_window(char *nom_fen,int x,int y,int width,int height,int zoom)
 {
@@ -105,7 +105,7 @@ Window fabrique_window(char *nom_fen,int x,int y,int width,int height,int zoom)
 
 /****************************************************************************/
 /* CREE_XIMAGE()							    */
-/* Crée une XImage à partir d'un tableau de float                           */
+/* Crï¿½e une XImage ï¿½ partir d'un tableau de float                           */
 /* L'image peut subir un zoom.						    */
 /****************************************************************************/
 XImage* cree_Ximage(float** mat,int z,int length,int width)
@@ -339,89 +339,37 @@ int main(int argc,char** argv)
 // PROGRAMME ---------------------------------------------------------------------
 //--------------------------------------------------------------------------------
 
- //Affichage dégradé de niveaux de gris dans Graph2D
- for(int i=0;i<length;i++) for(int j=0;j<width;j++) Graph2D[i][j]=j/2.0;
+ //Affichage dï¿½gradï¿½ de niveaux de gris dans Graph2D
+ for(int i=0;i<length;i++) for(int j=0;j<width;j++) {
 
- // a effacer 
- // for(int i=0;i<length;i++) for(int j=0;j<width;j++) Graph2D[i][j]=j/2.0;
-  
+     // Relie coordonnÃ©es des pixels au plan complexe
+     float x_k= 2.0 * (j - width/ 1.35) / (width - 1);
+     float y_l= 2.0 * (i - length/ 2.0) / (length - 1);
+
+     float x=0;
+     float y=0;
+     int iteration=0;
+     int nbIterMax=200;
+
+     // Calcul de Mandelbrot
+     while (x*x+y*y<4.0 && iteration<nbIterMax) {
+         float x_current =x*x-y*y+x_k;                  // partie rÃ©elle
+         y=2*x*y+y_l;                                   // partie imaginaire
+         x=x_current;
+         iteration++;
+     }
+     if (iteration==nbIterMax) {
+         Graph2D[i][j]=0;                               // noir dans l'ensemble
+     } else {
+         Graph2D[i][j]=255;                             // blanc hors de l'ensemble
+     }
+ }
    //---------------------------
    //Algorithme NEWTON
    //---------------------------
-   //
-   //
-  double y_table[] = {0.11,0.24,0.27,0.52,1.13,1.54,1.71,1.84,1.92,2.01};
 
-  
-  double sommeLn = 0;
+   //implementer ici
 
-
-  for(int i = 0; i<10; i++){sommeLn += log(y_table[i]);}
-  
-  const double terme_droit = 0.1* sommeLn;
-
-
-  double ft = 0;
-  double fprime= 0;
-  double cmv = 0.25;
-  double epsilon = 0.00001;
-  double tolerance = 0.000001;
-
-  double num = 0;
-  double denom = 0;
-
-  double numPrime = 0;
-  double denomPrime = 0;
-
-  double cmvFinal = 0;
-
-  double A = 0, B = 0, C = 0;
-
-  for (;;){
-	
-	  // f(x)
-	  for(int i = 0; i<10; i++){
-		  num += (pow(y_table[i], cmv))*log(y_table[i]);
-		  denom += pow(y_table[i],cmv);
-		}
-	// f(x+epsilon) 
-	  for(int i = 0; i<10; i++){
-		  numPrime += (pow(y_table[i], (cmv+epsilon)))*log(y_table[i]);
-		  denomPrime += pow(y_table[i],(cmv+epsilon));
-		}
-
-	  
-	  ft = (num/denom) - (1/cmv) - terme_droit;
-	  double ftEpsilon= (numPrime/denomPrime) - (1/(cmv+epsilon)) - terme_droit;
-
-	  for(int i = 0; i < 10; i++) {
-	    double y_pow_c = pow(y_table[i], cmv);
-	    double ln_y = log(y_table[i]);
-	    
-	    A += y_pow_c;
-	    B += y_pow_c * ln_y;
-	    C += y_pow_c * ln_y * ln_y;
-	}
-	 
-
-
-	  fprime = (C * A - B * B) / (A * A) + 1.0 / (cmv * cmv); 
-	  
-
-	  double newCmv = cmv - (ft/fprime);
-		
-	  
-	  if ((newCmv - cmv) < tolerance){
-	    
-	    cmvFinal = newCmv;
-
-	    break;
-	  }
-	  else{cmv = newCmv;}
-  }
-
-  printf("Valeur f(0) = %f\n",cmvFinal);
-  
      
 //--------------------------------------------------------------------------------
 //---------------- visu sous XWINDOW ---------------------------------------------

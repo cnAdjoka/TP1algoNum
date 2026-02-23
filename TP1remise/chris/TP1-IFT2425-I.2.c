@@ -1,7 +1,7 @@
 //------------------------------------------------------
-// module  : Tp-IFT2425-I.1.c
-// author  : 
-// date    : 
+// module  : Tp-IFT2425-I.2.c
+// author  : Chris-Noah Adjoka 
+// date    : 23 fevrier 2026
 // version : 1.0
 // language: C
 // note    :
@@ -366,45 +366,88 @@ int main(int argc,char** argv)
   double cmv = 0.25;
   double epsilon = 0.00001;
   double tolerance = 0.000001;
-
-  double num = 0;
-  double denom = 0;
-
-  double numPrime = 0;
-  double denomPrime = 0;
-
   double cmvFinal = 0;
+  int loop = 0;
 
   for (;;){
-	
-	  // f(x)
+
+	  double num = 0;
+	  double denom = 0;
+	  double numPlus = 0;
+	  double denomPlus = 0;
+	  double numMoins = 0;
+	  double denomMoins = 0;
+	  double numPlus2 = 0;
+	  double denomPlus2 = 0;
+	  double numMoins2 = 0;
+	  double denomMoins2 = 0;			
+
+
+	  loop++;
+	  printf("n = %d\n", loop);
+
+	  // f(x) args
 	  for(int i = 0; i<10; i++){
 		  num += (pow(y_table[i], cmv))*log(y_table[i]);
 		  denom += pow(y_table[i],cmv);
 		}
+
+
 	// f(x+epsilon) 
 	  for(int i = 0; i<10; i++){
-		  numPrime += (pow(y_table[i], (cmv+epsilon)))*log(y_table[i]);
-		  denomPrime += pow(y_table[i],(cmv+epsilon));
+		  numPlus+= (pow(y_table[i], (cmv+epsilon)))*log(y_table[i]);
+		  denomPlus+= pow(y_table[i],(cmv+epsilon));
 		}
+	
+	  // f(x-epsilon)
+	  for(int i = 0; i<10; i++){
+		  numMoins+= (pow(y_table[i], (cmv-epsilon)))*log(y_table[i]);
+		  denomMoins+= pow(y_table[i],(cmv-epsilon));
+		}
+	  // f(x+2epsilon)
+	  for(int i = 0; i<10; i++){
+		  numPlus2 += (pow(y_table[i], (cmv+(2*epsilon))))*log(y_table[i]);
+		  denomPlus2 += pow(y_table[i],(cmv+(2*epsilon)));
+		}
+		
+	  // f(x-2epsilon)
+	  for(int i = 0; i<10; i++){
+		  numMoins2 += (pow(y_table[i], (cmv-(2*epsilon))))*log(y_table[i]);
+		  denomMoins2 += pow(y_table[i],(cmv-(2*epsilon)));
+		}
+	 
+	  double ftEpsilonPlus= (numPlus/denomPlus) - (1/(cmv+epsilon)) - terme_droit;
+	  double ftEpsilonMoins= (numMoins/denomMoins) - (1/(cmv-epsilon)) - terme_droit;
+	  double ft2EpsilonPlus= (numPlus2/denomPlus2) - (1/(cmv + 2*epsilon)) - terme_droit ;
+	  double ft2EpsilonMoins =(numMoins2/denomMoins2) - (1/(cmv - 2*epsilon)) - terme_droit ;
 
 	  
 	  ft = (num/denom) - (1/cmv) - terme_droit;
-	  double ftEpsilon= (numPrime/denomPrime) - (1/(cmv+epsilon)) - terme_droit;
-	  
-	  fprime = (ftEpsilon - ft)/epsilon;
-	  
-
+	  fprime = (1/(12*epsilon))*(-1*(ft2EpsilonPlus)+8*(ftEpsilonPlus)-8*(ftEpsilonMoins)+(ft2EpsilonMoins));
+	 	
 	  double newCmv = cmv - (ft/fprime);
-		
-	  
-	  if ((newCmv - cmv) < tolerance){
-	    
-	    cmvFinal = newCmv;
 
+	  
+		
+	  if (fabs(newCmv - cmv) < tolerance){
+	       
+	    cmvFinal = newCmv;
+	    printf("Valeur cmv final = %f\n", cmvFinal);
+	    printf("F(cmv) final = %f\n",ft);
+	    
 	    break;
 	  }
-	  else{cmv = newCmv;}
+	  else{
+		  double diff = fabs(cmv-newCmv);
+		  cmv = newCmv;
+
+		  printf("current cmv = %f\n", cmv);
+		  printf("current F(cmv) = %f\n",ft);
+		  printf("diff = %f\n\n",diff);
+	
+
+	  }
+
   }
 
   printf("Valeur f(0) = %f\n",cmvFinal);
