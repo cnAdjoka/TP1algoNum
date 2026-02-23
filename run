@@ -1,0 +1,4 @@
+./compilegcc TP1-IFT2425-I.1 && ./compilegcc TP1-IFT2425-I.2 && ./compilegcc TP1-IFT2425-I.3 
+
+
+./TP1-IFT2425-I.1 && ./TP1-IFT2425-I.2 && ./TP1-IFT2425-I.3
